@@ -3,8 +3,6 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -25,6 +23,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Generate UUID for tag
+        id: uuid
+        run: echo "UUID_TAG=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -33,7 +35,10 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/tmp-files:latest
-            ghcr.io/${{ github.repository_owner }}/tmp-files:${{ github.run_number }}
+            ghcr.io/${{ github.repository_owner }}/tmp-files:${{ env.UUID_TAG }}
 
       - name: Output image URL
-        run: echo "✅ Image pushed to ghcr.io/${{ github.repository_owner }}/tmp-files:latest"
+        run: |
+          echo "✅ Image pushed:"
+          echo " - ghcr.io/${{ github.repository_owner }}/tmp-files:latest"
+          echo " - ghcr.io/${{ github.repository_owner }}/tmp-files:${{ env.UUID_TAG }}"

@@ -1,9 +1,10 @@
 services:
   tmp-files:
-    build: .
+    image: ghcr.io/andywijaya15/tmp-files:latest
     container_name: tmp-files
-    ports:
-      - "${PORT}:3003"
     volumes:
       - ./tmp:/app/tmp
+      - ./static:/app/static
+    ports:
+      - "${PORT}:3003"
     restart: unless-stopped

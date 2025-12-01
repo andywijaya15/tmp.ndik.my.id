@@ -5,6 +5,24 @@ services:
     volumes:
       - ./tmp:/app/tmp
       - ./static:/app/static
-    ports:
-      - "${PORT}:3003"
+    expose:
+      - "3003"
     restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy-tmp-files
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - tmp-files
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

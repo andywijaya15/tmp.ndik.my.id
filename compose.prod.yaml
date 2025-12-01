@@ -1,19 +1,10 @@
 services:
-  tmp-files-blue:
+  tmp-files:
     image: ghcr.io/andywijaya15/tmp-files:latest
-    container_name: tmp-files-blue
+    container_name: tmp-files
     volumes:
       - ./tmp:/app/tmp
       - ./static:/app/static
     ports:
-      - "${PORT1}:3003"
-    restart: unless-stopped
-  tmp-files-green:
-    image: ghcr.io/andywijaya15/tmp-files:latest
-    container_name: tmp-files-green
-    volumes:
-      - ./tmp:/app/tmp
-      - ./static:/app/static
-    ports:
-      - "${PORT2}:3003"
+      - "${PORT}:3003"
     restart: unless-stopped
